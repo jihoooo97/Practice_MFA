@@ -9,16 +9,13 @@ import ProjectDescription
 
 // 테스트가 있는지, 리소스가 있는지.
 let nameAttribute: Template.Attribute = .required("name")
-let includeAttribute: Template.Attribute = .optional("include", default: .string("tests"))
 
 let template = Template(
     description: "Module Template",
     attributes: [
         nameAttribute
     ],
-    items: "\(includeAttribute)" == "Resource"
-    ? [ModuleTemplate.project, ModuleTemplate.sources, ModuleTemplate.derived].flatMap { $0.item }
-    : ModuleTemplate.allCases.flatMap { $0.item }
+    items: ModuleTemplate.allCases.flatMap { $0.item }
 )
 
 
@@ -27,6 +24,10 @@ enum ModuleTemplate: CaseIterable {
 
     var basePath: String {
         "Projects/Modules/\(nameAttribute)"
+    }
+    
+    var templatePath: String {
+        "Tuist/Templates/"
     }
     
     var path: String {
@@ -46,14 +47,11 @@ enum ModuleTemplate: CaseIterable {
         switch self {
         case .project:
             [.file(path: path + "/Project.swift", templatePath: "Project.stencil")]
-        case .sources: "\(includeAttribute)" == "Resource"
-            ? [.file(path: path + "/Empty.swift", templatePath: "Empty.stencil"),
-               .directory(path: path + "/Resources", sourcePath: "Assets.xcassets")]
-            : [.file(path: path + "/Empty.swift", templatePath: "Empty.stencil")]
+        case .sources: [.file(path: path + "/Empty.swift", templatePath: .relativeToRoot(templatePath + "Empty.stencil"))]
         case .derived:
-            [.file(path: path + "/InfoPlists/Info.plist", templatePath: "Info.plist")]
+            [.file(path: path + "/InfoPlists/Info.plist", templatePath: .relativeToRoot(templatePath + "Info.plist"))]
         case .tests:
-            [.file(path: path + "/Sources/\(nameAttribute)Tests.swift", templatePath: "Tests.stencil")]
+            [.file(path: path + "/Sources/\(nameAttribute)Tests.swift", templatePath: .relativeToRoot(templatePath + "Tests.stencil"))]
         }
     }
 }

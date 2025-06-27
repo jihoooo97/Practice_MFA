@@ -25,6 +25,10 @@ enum FeatureTemplate: CaseIterable {
         "Projects/Features/\(nameAttribute)Feature"
     }
     
+    var templatePath: String {
+        "Tuist/Templates/"
+    }
+    
     var path: String {
         switch self {
         case .project:
@@ -45,26 +49,26 @@ enum FeatureTemplate: CaseIterable {
         case .project:
             [.file(path: path + "/Project.swift", templatePath: "Project.stencil")]
         case .sources:
-            [.file(path: path + "/Empty.swift", templatePath: "Empty.stencil")]
+            [.file(path: path + "/Empty.swift", templatePath: .relativeToRoot(templatePath + "Empty.stencil"))]
         case .derived:
-            [.file(path: path + "/InfoPlists/Info.plist", templatePath: "Info.plist")]
+            [.file(path: path + "/InfoPlists/Info.plist", templatePath: .relativeToRoot(templatePath + "Info.plist"))]
         case .tests:
             [.file(
                 path: path + "/Sources/\(nameAttribute)FeatureTests.swift",
-                templatePath: "Tests.stencil"
+                templatePath: .relativeToRoot(templatePath + "Tests.stencil")
             )]
         case .demo:
             [.file(
                 path: path + "/Sources/AppDelegate.swift",
-                templatePath: .relativeToRoot("Tuist/Templates/AppDelegate.stencil")
+                templatePath: "AppDelegate.stencil"
             ),
              .file(
                 path: path + "/Sources/SceneDelegate.swift",
-                templatePath: .relativeToRoot("Tuist/Templates/SceneDelegate.stencil")
+                templatePath: "SceneDelegate.stencil"
              ),
              .directory(
-                path: path + "/Resources/Assets.xcassets",
-                sourcePath: "Assets.xcassets"
+                path: path + "/Resources",
+                sourcePath: .relativeToRoot(templatePath + "Assets.xcassets")
              )]
         }
     }
