@@ -23,7 +23,7 @@ public extension Project {
         let hasDynamicFramework = targets.contains(.dynamicFramework)
         
         let baseSettings: SettingsDictionary = .baseSettings//.setCodeSignManual()
-        let configurationName: ConfigurationName = "MFA"
+        let configurationName: ConfigurationName = "Develop"
         
         var projectTargets: [Target] = []
 //        var schemes: [Scheme] = []
@@ -45,7 +45,7 @@ public extension Project {
                 resources: [.glob(pattern: "Resources/**")],
                 entitlements: nil,
                 dependencies: featureDependencies + moduleDependencies + externalDependencies,
-                settings: .settings(base: baseSettings, configurations: XCConfig.custom(name: "\(configurationName)").configurations)
+                settings: .settings(base: baseSettings)//, configurations: XCConfig.project)
             )
             
             projectTargets.append(target)
@@ -61,12 +61,12 @@ public extension Project {
                 name: name + "Interface",
                 destinations: Self.destinations,
                 product: .framework,
-                bundleId: Self.bundlePrefix + "\(name)FeatureInterface",
+                bundleId: Self.bundlePrefix + "\(name)Interface",
                 deploymentTargets: Self.deploymentTarget,
                 infoPlist: .default,
                 sources: ["Interface/Sources/**"],
                 dependencies: interfaceDependencies,
-                settings: .settings(base: settings)
+                settings: .settings(base: settings)//, configurations: XCConfig.framework)
             )
             
             projectTargets.append(target)
@@ -77,6 +77,9 @@ public extension Project {
         
         if targets.contains(where: { $0.hasFramework }) {
             let settings = baseSettings
+            let deps: [TargetDependency] = targets.contains(.interface)
+            ? [.target(name: "\(name)Interface")]
+            : []
             
             let target = Target.target(
                 name: name,
@@ -87,8 +90,8 @@ public extension Project {
                 infoPlist: .default,
                 sources: ["Sources/**"],
                 resources: hasResource ? [.glob(pattern: "Resources/**")] : [],
-                dependencies: featureDependencies + moduleDependencies + externalDependencies,
-                settings: .settings(base: settings, configurations: XCConfig.custom(name: "\(configurationName)").configurations)
+                dependencies: deps + featureDependencies + moduleDependencies + externalDependencies,
+                settings: .settings(base: settings)//, configurations: XCConfig.framework)
             )
             
             projectTargets.append(target)
@@ -108,8 +111,8 @@ public extension Project {
                 deploymentTargets: Self.deploymentTarget,
                 infoPlist: .default,
                 sources: ["Tests/Sources/**"],
-                dependencies: [.target(name: name + "Feature")],
-                settings: .settings(base: settings, configurations: XCConfig.custom(name: "\(configurationName)").configurations)
+                dependencies: [.target(name: name)],
+                settings: .settings(base: settings)//, configurations: XCConfig.tests)
             )
             
             projectTargets.append(target)
@@ -128,8 +131,8 @@ public extension Project {
                 infoPlist: .extendingDefault(with: Self.demoInfoPlist),
                 sources: ["Demo/Sources/**"],
                 resources: [.glob(pattern: "Demo/Resources/**")],
-                dependencies: [.target(name: name + "Feature")],
-                settings: .settings(base: baseSettings, configurations: XCConfig.custom(name: "\(configurationName)").configurations)
+                dependencies: [.target(name: name)],
+                settings: .settings(base: baseSettings)//, configurations: XCConfig.demo)
             )
             
             projectTargets.append(target)
@@ -146,7 +149,7 @@ public extension Project {
             name: name,
             organizationName: Self.workspaceName,
             packages: packages,
-            settings: .settings(configurations: XCConfig.custom(name: "\(configurationName)").configurations),
+            settings: .settings(base: baseSettings),
             targets: projectTargets,
             schemes: schemes
         )

@@ -8,6 +8,5 @@ import ProjectDescriptionHelpers
 let project = Project.createModule(
     name: "{{ name }}",
     targets: [.staticFramework],
-    moduleDependencies: [],
-    hasResource: false
+    moduleDependencies: []
 )

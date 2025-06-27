@@ -7,7 +7,7 @@ import ProjectDescriptionHelpers
 
 let project = Project.createModule(
     name: "{{ name }}Feature",
-    targets: [.staticFramework, .unitTest, .demo],
+    targets: [.staticFramework, .interface, .unitTest, .demo],
     featureDependencies: [],
     interfaceDependencies: [],
     moduleDependencies: []

@@ -19,7 +19,7 @@ let template = Template(
 
 
 enum FeatureTemplate: CaseIterable {
-    case project, sources, derived, tests, demo
+    case project, interface, sources, tests, derived, demo
 
     var basePath: String {
         "Projects/Features/\(nameAttribute)Feature"
@@ -33,12 +33,14 @@ enum FeatureTemplate: CaseIterable {
         switch self {
         case .project:
             basePath
+        case .interface:
+            basePath + "/Interface"
         case .sources:
             basePath + "/Sources"
-        case .derived:
-            basePath + "/Derived"
         case .tests:
             basePath + "/Tests"
+        case .derived:
+            basePath + "/Derived"
         case .demo:
             basePath + "/Demo"
         }
@@ -48,23 +50,25 @@ enum FeatureTemplate: CaseIterable {
         switch self {
         case .project:
             [.file(path: path + "/Project.swift", templatePath: "Project.stencil")]
+        case .interface:
+            [.file(path: path + "/Sources/Empty.swift", templatePath: .relativeToRoot(templatePath + "Empty.stencil"))]
         case .sources:
             [.file(path: path + "/Empty.swift", templatePath: .relativeToRoot(templatePath + "Empty.stencil"))]
-        case .derived:
-            [.file(path: path + "/InfoPlists/Info.plist", templatePath: .relativeToRoot(templatePath + "Info.plist"))]
         case .tests:
             [.file(
                 path: path + "/Sources/\(nameAttribute)FeatureTests.swift",
                 templatePath: .relativeToRoot(templatePath + "Tests.stencil")
             )]
+        case .derived:
+            [.file(path: path + "/InfoPlists/Info.plist", templatePath: .relativeToRoot(templatePath + "Info.plist"))]
         case .demo:
             [.file(
                 path: path + "/Sources/AppDelegate.swift",
-                templatePath: "AppDelegate.stencil"
+                templatePath: .relativeToRoot(templatePath + "AppDelegate.stencil")
             ),
              .file(
                 path: path + "/Sources/SceneDelegate.swift",
-                templatePath: "SceneDelegate.stencil"
+                templatePath: .relativeToRoot(templatePath + "SceneDelegate.stencil")
              ),
              .directory(
                 path: path + "/Resources",

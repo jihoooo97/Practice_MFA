@@ -16,13 +16,13 @@ public extension Scheme {
             buildAction: .buildAction(targets: ["\(name)"]),
             testAction: .targets(
                 ["\(name)Tests"],
-                configuration: config,
+//                configuration: config,
                 options: .options(coverage: true, codeCoverageTargets: ["\(name)"])
             ),
-            runAction: .runAction(configuration: config),
-            archiveAction: .archiveAction(configuration: config),
-            profileAction: .profileAction(configuration: config),
-            analyzeAction: .analyzeAction(configuration: config)
+            runAction: .runAction(),//(configuration: config),
+//            archiveAction: .archiveAction(configuration: config),
+//            profileAction: .profileAction(configuration: config),
+//            analyzeAction: .analyzeAction(configuration: config)
         )
     }
     
@@ -31,7 +31,7 @@ public extension Scheme {
             name: name + "Demo",
             shared: true,
             buildAction: .buildAction(targets: ["\(name)Demo"]),
-            runAction: .runAction(configuration: config)
+            runAction: .runAction()//configuration: config)
         )
     }
     

@@ -10,7 +10,7 @@ import ProjectDescription
 
 public extension Project {
     
-    static let workspaceName = "MFA"
+    static let workspaceName = "Practice_MFA"
     static let deploymentTarget = DeploymentTargets.iOS("17.0")
     static let destinations: Destinations = [Destination.iPhone]
     static let bundlePrefix = "com.mfa."
