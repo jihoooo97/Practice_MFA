@@ -12,26 +12,26 @@ public extension TargetDependency {
     enum Feature {
         case A, B, C, D
         
-        var project: TargetDependency {
+        public var project: TargetDependency {
             .project(
                 target: "\(self)Feature",
                 path: .relativeToRoot("Projects/Features/\(self)Feature")
             )
         }
         
-        var interface: TargetDependency {
+        public var interface: TargetDependency {
             .project(
                 target: "\(self)Interface",
                 path: .relativeToRoot("Projects/Features/\(self)FeatureInterface")
             )
         }
         
-        static let RootFeature = TargetDependency.project(
+        public static let RootFeature = TargetDependency.project(
             target: "RootFeature",
             path: .relativeToRoot("Projects/Features/RootFeature")
         )
         
-        static let BaseFeature = TargetDependency.project(
+        public static let BaseFeature = TargetDependency.project(
             target: "BaseFeature",
             path: .relativeToRoot("Projects/Features/BaseFeature")
         )
@@ -44,7 +44,7 @@ public extension TargetDependency {
         case Domain
         case UIComponent
         
-        var project: TargetDependency {
+        public var project: TargetDependency {
             .project(
                 target: "\(self)",
                 path: .relativeToRoot("Projects/Modules/\(self)")
@@ -54,16 +54,16 @@ public extension TargetDependency {
     
     
     enum Library {
-        static let SnapKit = TargetDependency.external(name: "SnapKit")
+        public static let SnapKit = TargetDependency.external(name: "SnapKit")
         
-        static let RxSwift = TargetDependency.external(name: "RxSwift")
-        static let RxCocoa = TargetDependency.external(name: "RxCocoa")
-        static let RxDatasources = TargetDependency.external(name: "RxDataSources")
+        public static let RxSwift = TargetDependency.external(name: "RxSwift")
+        public static let RxCocoa = TargetDependency.external(name: "RxCocoa")
+        public static let RxDatasources = TargetDependency.external(name: "RxDataSources")
         
-        static let Moya = TargetDependency.external(name: "Moya")
-        static let RxMoya = TargetDependency.external(name: "RxMoya")
+        public static let Moya = TargetDependency.external(name: "Moya")
+        public static let RxMoya = TargetDependency.external(name: "RxMoya")
         
-        static let Kingfisher = TargetDependency.external(name: "Kingfisher")
+        public static let Kingfisher = TargetDependency.external(name: "Kingfisher")
     }
     
 }
